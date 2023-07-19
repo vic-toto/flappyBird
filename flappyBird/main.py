@@ -16,7 +16,6 @@ def init():
     baseX = 500
 
 init()
-
 #adding elements to screen
 def draw():
     gameScreen.blit(background, (0,0))
@@ -27,6 +26,17 @@ def update():
     pygame.display.update()
     pygame.time.Clock().tick(FPS)
 
+def game_over():
+    gameScreen.blit(gameover, (100, 300))
+    update()
+    restart = False
+    while not restart:
+        for event in pygame.event.get():
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE): #restarts game when press space
+                init()
+                restart = True
+            if (event.type == pygame.QUIT):
+                pygame.quit()                       #manages closing the gameScreen
 
 
 #create variables and set paths to assets
@@ -37,13 +47,11 @@ bird = pygame.transform.scale(bird, (100, 100))  # example bird size, change as 
 base = pygame.image.load('assets/base.png')
 base = pygame.transform.scale(base, (baseX, 200))
 gameover = pygame.image.load('assets/gameover.png')
-gameover = pygame.transform.scale(gameover, (screenWidth, screenHeight))
+gameover = pygame.transform.scale(gameover, (200, 80))
 highTube = pygame.image.load('assets/highTube.png')
 highTube = pygame.transform.scale(highTube, (screenWidth, screenHeight))  # example tube size, change as necessary
 lowTube = pygame.image.load('assets/lowTube.png')
 lowTube = pygame.transform.scale(lowTube, (screenWidth, screenHeight))
-
-
 
 while True: 
     baseX -= FORWARD_VELOCITY
@@ -59,6 +67,8 @@ while True:
             birdVelY = -10                      #manages bird movement
         if (event.type == pygame.QUIT):
             pygame.quit()                       #manages closing the gameScreen
+        if (birdy >= 650):
+            game_over()
 
     #update screen
     draw()
