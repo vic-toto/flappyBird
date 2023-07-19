@@ -3,6 +3,15 @@ import random
 
 pygame.init()
 
+class   Tubes:
+    def __init__(self):
+        self.x = 300
+        self.y = random. randint(20, 50)
+    def go_and_draw(self):
+        self.x -= FORWARD_VELOCITY
+        gameScreen.blit(lowTube, (self.x, self.y-10))
+        gameScreen.blit(highTube, (self.x+400, self.y+10))
+
 #initialise game screen and global variables
 gameScreen = pygame.display.set_mode((400, 750)) #set_mode(width, height)
 screenWidth, screenHeight = gameScreen.get_size()
@@ -10,15 +19,20 @@ FPS = 50 #Frames per second
 FORWARD_VELOCITY = 3
 
 def init():
-    global birdx, birdy, birdVelY, baseX
+    global birdx, birdy, birdVelY, baseX, tube_list
     birdx, birdy = 60, 150
     birdVelY = 0
     baseX = 500
+    tube_list = []
+    tube_list.append(Tubes())
 
 init()
+
 #adding elements to screen
 def draw():
     gameScreen.blit(background, (0,0))
+    for t in tube_list:
+        t.go_and_draw()
     gameScreen.blit(bird, (birdx, birdy))
     gameScreen.blit(base, (baseX, 700))
 
@@ -67,8 +81,9 @@ while True:
             birdVelY = -10                      #manages bird movement
         if (event.type == pygame.QUIT):
             pygame.quit()                       #manages closing the gameScreen
+        if tube_list[-1].x < -300: tube_list.append(Tubes())
         if (birdy >= 650):
-            game_over()
+            game_over()                         #collision with base
 
     #update screen
     draw()
