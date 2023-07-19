@@ -42,6 +42,15 @@ while True:
     #gravity
     birdVelY += 1
     birdy += birdVelY
+
+    #rules
+    for event in pygame.event.get():
+        if (event.type == pygame.KEYDOWN
+            and event.key == pygame.K_UP ) :
+            birdVelY = -10
+        if (event.type == pygame.QUIT):
+            pygame.quit()
+
     #update screen
     draw()
     update()
